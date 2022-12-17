@@ -14,7 +14,7 @@ import {
   Signature,
   Circuit,
   Character,
-  Mina,
+  //Mina,
 } from 'snarkyjs';
 
 /**
@@ -68,16 +68,16 @@ export class EasyMultisig extends SmartContract {
     const userHash1: Field = this.userHash1.get();
     this.userHash1.assertEquals(userHash1);
     userHash0.assertEquals(
-      Poseidon.hash([salt, Field.fromFields(user0.toFields())]),
+      Poseidon.hash([salt, user0.toFields()[0]]),
       'wrong user0'
     );
     userHash1.assertEquals(
-      Poseidon.hash([salt, Field.fromFields(user1.toFields())]),
+      Poseidon.hash([salt, user1.toFields()[0]]),
       'wrong user1'
     );
 
     // construct signed data
-    const char1: Character = new Character();
+    const char1: Character = new Character('');
     const signatureData = char1
       .toFields()
       .concat(payee.toFields())
@@ -93,9 +93,9 @@ export class EasyMultisig extends SmartContract {
 
     // check if enough to pay
 
-    // pay
-    this.balance.subInPlace(payAmount);
-    Mina.getAccount(payee).balance.add(payAmount); // check?
+    // pay todo:
+    //this.balance.subInPlace(payAmount);
+    //Mina.getAcscount(payee).balance.add(payAmount); // check?
   }
 
   // create proposal

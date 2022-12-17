@@ -6,6 +6,10 @@ import {
   Mina,
   PrivateKey,
   AccountUpdate,
+  PublicKey,
+  UInt64,
+  Signature,
+  Character,
 } from 'snarkyjs';
 
 (async function main() {
@@ -46,6 +50,37 @@ import {
   );
 
   // ----------------------------------------------------
+
+  // test easySingleMethodPay
+  // this allows easy payment without multiple stage of process
+  const payee: PublicKey = user1;
+  const payAmount: UInt64 = UInt64.from(1_000_000);
+
+  // construct signed data
+  const char1: Character = new Character('');
+  const signatureData = char1
+    .toFields()
+    .concat(payee.toFields())
+    .concat(payAmount.toFields());
+  const signature0: Signature = Signature.create(
+    deployerAccount,
+    signatureData
+  );
+  const signature1: Signature = Signature.create(account1, signatureData);
+
+  const txn1 = await Mina.transaction(deployerAccount, () => {
+    zkAppInstance.easySingleMethodPay(
+      payee,
+      payAmount,
+      user0,
+      signature0,
+      user1,
+      signature1,
+      salt
+    );
+    zkAppInstance.sign(zkAppPrivateKey);
+  });
+  await txn1.send();
 
   // ----------------------------------------------------
 

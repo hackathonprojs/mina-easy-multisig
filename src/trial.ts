@@ -31,6 +31,14 @@ console.log(
   `hash of public key: ${Poseidon.hash([salt, publicKey.toFields()[0]])}`
 );
 
+const deployerAccount = Local.testAccounts[0].privateKey;
+const balance = Mina.getBalance(deployerAccount.toPublicKey());
+console.log(`deployeraccount balance: ${balance}`);
+
+const account1 = Local.testAccounts[1].privateKey;
+const balance1 = Mina.getBalance(account1.toPublicKey());
+console.log(`account1 balance: ${balance1}`);
+
 console.log('Shutting down');
 
 await shutdown();
