@@ -1,3 +1,3 @@
-import { Add } from './Add.js';
+import { EasyMultisig } from './EasyMultisig.js';
 
-export { Add };
+export { EasyMultisig };
